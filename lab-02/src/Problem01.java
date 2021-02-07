@@ -2,7 +2,20 @@ public class Problem01 {
     public static void main(String[] args) {
 
         Canvas canvas = new Canvas();
-        canvas.set(10,10);
+        Turtle turtle = new Turtle(canvas, 0, 0, false, Turtle.EAST);
+
+        turtle.penDown();
+
+        turtle.move(10);
+        turtle.turnRight();
+        turtle.move(10);
+        turtle.turnRight();
+        turtle.move(10);
+        turtle.turnRight();
+        turtle.move(10);
+        turtle.turnRight();
         canvas.show();
+
+
     }
 }

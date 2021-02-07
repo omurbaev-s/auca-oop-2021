@@ -1,5 +1,6 @@
 public class Canvas {
     public static final int SIZE = 20;
+
     private char[][] data;
 
     public Canvas(){
@@ -25,5 +26,8 @@ public class Canvas {
             }
             System.out.println();
         }
+    }
+    public boolean isOnCanvas(int row, int col) {
+        return 0<=row && row<SIZE && 0<=col && col<SIZE;
     }
 }
