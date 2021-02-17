@@ -2,6 +2,9 @@ import processing.core.*;
 
 public class Problem02 extends PApplet {
     Star[] stars = new Star[100];
+    final int MIN_R=5;
+    final int MAX_R=25;
+    float r;
 
     public void settings() {
         fullScreen();
@@ -10,7 +13,8 @@ public class Problem02 extends PApplet {
     public void setup() {
         noStroke();
         for(int i = 0; i< stars.length; i++) {
-            stars[i] = new Star(this, random(width), random(height), random(10, 30), random(-10, 10), random(-10, 10));
+            r = random(MIN_R, MAX_R);
+            stars[i] = new Star(this, random(0+r,width-r), random(0+r,height-r), r, random(-5, 5), random(-5, 5));
         }
         frameRate(60);
     }
