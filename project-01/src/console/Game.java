@@ -1,0 +1,93 @@
+package console;
+
+public class Game {
+    int height;
+    int width;
+    int mines;
+    int[][] data;
+    int firstClick;
+
+    public Game(int height, int width, int mines) {
+        if(height<1){
+            throw new RuntimeException("Game: height is less than one: "+height);
+        }
+        if(width<1){
+            throw new RuntimeException("Game: width is less than one: "+width);
+        }
+        if(mines<1 || mines>=width*height){
+            throw new RuntimeException("Game: incorrect number of mines: "+mines);
+        }
+        this.height=height;
+        this.width=width;
+        this.mines=mines;
+        this.data= new int [height][width];
+        this.firstClick=0;
+    }
+    @Override
+    public String toString() {
+        String header = String.format("Minesweeper: height = %d, width = %d, mines = %d\n", height, width, mines);
+                StringBuilder r = new StringBuilder(header);
+
+                for(int i=0; i<height; i++){
+                    for(int j=0; j< width; j++){
+                        r.append(data[i][j]);
+                    }
+                    if(i!=height-1) {
+                        r.append("\n");
+                    }
+                }
+
+                return r.toString();
+    }
+
+    public void left(int row, int col) {
+
+        if(row<0 || row>=height){
+            throw new RuntimeException("Incorrect row: "+row);
+        }
+        if(col<0 || col>=width){
+            throw new RuntimeException("Incorrect column: "+col);
+        }
+
+
+        if(firstClick==0) {
+            int count = 0;
+            while (count < mines) {
+
+                int cRow = (int) (Math.random() * height);
+                int cCol = (int) (Math.random() * width);
+                while(cRow==row && cCol==col) {
+                    cRow = (int) (Math.random() * height);
+                    cCol = (int) (Math.random() * width);
+                }
+                if(data[cRow][cCol]==9) {
+                    continue;
+                }
+                    data[cRow][cCol] = 9;
+                    count++;
+
+            }
+        }
+        firstClick++;
+
+        int[] dr = {-1,-1,0,1,1,1,0,-1};
+        int[] dc = {0,1,1,1,0,-1,-1,-1};
+
+        for(int r=0; r<height; r++){
+            for(int c=0; c<width; c++){
+
+                if(data[r][c]!=9){
+                    int nMines=0;
+                    for(int i=0; i< dr.length; i++){
+                        int tr = r+dr[i];
+                        int tc = c+dc[i];
+                        if(tr>=0 && tr<height && tc>=0 && tc<width && data[tr][tc]==9){
+                            nMines++;
+                        }
+                    }
+                    data[r][c]=nMines;
+                }
+            }
+        }
+    }
+}
