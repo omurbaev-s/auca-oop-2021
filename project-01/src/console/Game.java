@@ -1,5 +1,7 @@
 package console;
 
+import java.util.ArrayList;
+
 public class Game {
     int height;
     int width;
@@ -42,52 +44,86 @@ public class Game {
 
     public void left(int row, int col) {
 
-        if(row<0 || row>=height){
-            throw new RuntimeException("Incorrect row: "+row);
+        if (row < 0 || row >= height) {
+            throw new RuntimeException("Incorrect row: " + row);
         }
-        if(col<0 || col>=width){
-            throw new RuntimeException("Incorrect column: "+col);
+        if (col < 0 || col >= width) {
+            throw new RuntimeException("Incorrect column: " + col);
         }
 
 
-        if(firstClick==0) {
+        if (firstClick == 0) {
             int count = 0;
             while (count < mines) {
 
                 int cRow = (int) (Math.random() * height);
                 int cCol = (int) (Math.random() * width);
-                while(cRow==row && cCol==col) {
+                while (cRow == row && cCol == col) {
                     cRow = (int) (Math.random() * height);
                     cCol = (int) (Math.random() * width);
                 }
-                if(data[cRow][cCol]==9) {
+                if (data[cRow][cCol] == 9) {
                     continue;
                 }
-                    data[cRow][cCol] = 9;
-                    count++;
+                data[cRow][cCol] = 9;
+                count++;
 
             }
         }
-        firstClick++;
+        if (firstClick == 0) {
+            int[] dr = {-1, -1, 0, 1, 1, 1, 0, -1};
+            int[] dc = {0, 1, 1, 1, 0, -1, -1, -1};
 
-        int[] dr = {-1,-1,0,1,1,1,0,-1};
-        int[] dc = {0,1,1,1,0,-1,-1,-1};
+            for (int r = 0; r < height; r++) {
+                for (int c = 0; c < width; c++) {
 
-        for(int r=0; r<height; r++){
-            for(int c=0; c<width; c++){
-
-                if(data[r][c]!=9){
-                    int nMines=0;
-                    for(int i=0; i< dr.length; i++){
-                        int tr = r+dr[i];
-                        int tc = c+dc[i];
-                        if(tr>=0 && tr<height && tc>=0 && tc<width && data[tr][tc]==9){
-                            nMines++;
+                    if (data[r][c] != 9) {
+                        int nMines = 0;
+                        for (int i = 0; i < dr.length; i++) {
+                            int tr = r + dr[i];
+                            int tc = c + dc[i];
+                            if (tr >= 0 && tr < height && tc >= 0 && tc < width && data[tr][tc] == 9) {
+                                nMines++;
+                            }
                         }
+                        data[r][c] = nMines;
                     }
-                    data[r][c]=nMines;
                 }
             }
+        }
+        firstClick++;
+    }
+
+    public void floodFill(int row, int col) {
+        if(row<0 || row>height-1 || col<0 || col>width-1) {
+            return;
+        }
+
+        if(data[row][col]==0) {
+            data[row][col] = 8;
+
+            floodFill(row + 1, col);
+            floodFill(row, col + 1);
+            floodFill(row - 1, col);
+            floodFill(row, col - 1);
+
+            floodFill(row-1, col+1);
+            floodFill(row+1, col+1);
+            floodFill(row+1, col-1);
+            floodFill(row-1, col-1);
+        }
+
+
+
+
+    }
+
+    public void right(int row, int col) {
+        if (row < 0 || row >= height) {
+            throw new RuntimeException("Incorrect row: " + row);
+        }
+        if (col < 0 || col >= width) {
+            throw new RuntimeException("Incorrect column: " + col);
         }
     }
 }

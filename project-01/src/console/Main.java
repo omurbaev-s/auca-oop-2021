@@ -8,6 +8,7 @@ public class Main {
     static Scanner inp = new Scanner(System.in);
     public static void main(String[] args) {
         Game game = null;
+
         try {
             game = parseArgs(args);
         } catch (NumberFormatException e) {
@@ -35,7 +36,16 @@ public class Main {
                         int row = cmdInp.nextInt();
                         int col = cmdInp.nextInt();
                         game.left(row, col);
+                        game.floodFill(row, col);
                         break;
+                    }catch (RuntimeException e){
+                        System.out.println(e.getMessage());
+                    }
+                case "right":
+                    try{
+                        int row = cmdInp.nextInt();
+                        int col = cmdInp.nextInt();
+                        game.right(row, col);
                     }catch (RuntimeException e){
                         System.out.println(e.getMessage());
                     }
