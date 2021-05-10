@@ -7,6 +7,9 @@ import javax.swing.*;
 
 public class Main extends JFrame {
     ArrayList<Figure> figures = new ArrayList<>();
+    Figure selectedFigure=null;
+    int prevMouseX=-1;
+    int prevMouseY=-1;
 
     JPanel controlPanel;
     CanvasPanel mainPanel;
@@ -18,6 +21,8 @@ public class Main extends JFrame {
         setLayout(new BorderLayout());
 
         mainPanel = new CanvasPanel();
+        mainPanel.setFocusable(true);
+        mainPanel.requestFocus();
         add(mainPanel, BorderLayout.CENTER);
 
         controlPanel = new JPanel();
@@ -30,23 +35,83 @@ public class Main extends JFrame {
         rectButton.addActionListener(e -> {
            figures.add(new Rect(0,0, 100,100));
            repaint();
+            mainPanel.requestFocus();
         });
         circleButton.addActionListener(e -> {
             figures.add(new Circle(150,50, 50));
             repaint();
+            mainPanel.requestFocus();
         });
         crossButton.addActionListener(e -> {
             figures.add(new Cross(250,50, 100,10));
             repaint();
+            mainPanel.requestFocus();
         });
 
+        mainPanel.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if(e.getKeyCode()==KeyEvent.VK_DELETE && selectedFigure!=null){
+                    figures.remove(selectedFigure);
+                    selectedFigure=null;
+                    repaint();
+                }
+            }
+        });
         mainPanel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
-                for(Figure f: figures){
-                    if(f.contains(e.getX(), e.getY())){
-                        JOptionPane.showMessageDialog(Main.this, f.toString());
+                if (e.getButton() == MouseEvent.BUTTON3){
+                    if(selectedFigure != null){
+                        selectedFigure.setSelected(false);
+                        selectedFigure=null;
+                    }
+                    for (Figure f : figures) {
+                        if (f.contains(e.getX(), e.getY())) {
+                            selectedFigure=f;
+                        }
+                    }
+                    if(selectedFigure != null){
+                        selectedFigure.setSelected(true);
+                        repaint();
+                        JOptionPane.showMessageDialog(Main.this, selectedFigure.toString());
+                    }
+            }
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                super.mousePressed(e);
+                if(e.getButton()==MouseEvent.BUTTON1){
+                    if(selectedFigure != null){
+                        selectedFigure.setSelected(false);
+                        selectedFigure=null;
+                    }
+                    for(Figure f : figures){
+                        if(f.contains(e.getX(),e.getY())){
+                            f.setSelected(true);
+                            selectedFigure=f;
+                            prevMouseX=e.getX();
+                            prevMouseY=e.getY();
+                            repaint();
+                        }
+                    }
+                }
+            }
+        });
+        mainPanel.addMouseMotionListener(new MouseMotionAdapter() {
+            @Override
+            public void mouseDragged(MouseEvent e) {
+                super.mouseDragged(e);
+                if(SwingUtilities.isLeftMouseButton(e)) {
+                    if (selectedFigure != null) {
+                        int dx = e.getX() - prevMouseX;
+                        int dy = e.getY() - prevMouseY;
+                        prevMouseX = e.getX();
+                        prevMouseY = e.getY();
+                        selectedFigure.move(dx, dy);
+                        repaint();
                     }
                 }
             }
