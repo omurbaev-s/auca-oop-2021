@@ -1,5 +1,6 @@
 package console;
 
+
 import java.util.ArrayList;
 
 public class Game {
@@ -7,39 +8,54 @@ public class Game {
     int width;
     int mines;
     int[][] data;
-    int firstClick;
+    boolean firstClick;
+
+    ArrayList<Flag> flags = new ArrayList<>();
+
 
     public Game(int height, int width, int mines) {
-        if(height<1){
-            throw new RuntimeException("Game: height is less than one: "+height);
+        if (height < 1) {
+            throw new RuntimeException("Game: height is less than one: " + height);
         }
-        if(width<1){
-            throw new RuntimeException("Game: width is less than one: "+width);
+        if (width < 1) {
+            throw new RuntimeException("Game: width is less than one: " + width);
         }
-        if(mines<1 || mines>=width*height){
-            throw new RuntimeException("Game: incorrect number of mines: "+mines);
+        if (mines < 1 || mines >= width * height) {
+            throw new RuntimeException("Game: incorrect number of mines: " + mines);
         }
-        this.height=height;
-        this.width=width;
-        this.mines=mines;
-        this.data= new int [height][width];
-        this.firstClick=0;
+        this.height = height;
+        this.width = width;
+        this.mines = mines;
+        this.data = new int[height][width];
+        this.firstClick = true;
+
     }
+
     @Override
     public String toString() {
         String header = String.format("Minesweeper: height = %d, width = %d, mines = %d\n", height, width, mines);
-                StringBuilder r = new StringBuilder(header);
 
-                for(int i=0; i<height; i++){
-                    for(int j=0; j< width; j++){
-                        r.append(data[i][j]);
+        StringBuilder r = new StringBuilder(header);
+
+                for (int i = 0; i < height; i++) {
+                    for (int j = 0; j < width; j++) {
+                        if(flags.contains(new Flag(i, j))){
+                            r.append('F');
+                        }else {
+                            r.append(data[i][j]);
+                        }
+
                     }
-                    if(i!=height-1) {
+                    if (i != height - 1) {
                         r.append("\n");
                     }
                 }
 
-                return r.toString();
+
+
+
+
+        return r.toString();
     }
 
     public void left(int row, int col) {
@@ -52,7 +68,7 @@ public class Game {
         }
 
 
-        if (firstClick == 0) {
+        if (firstClick) {
             int count = 0;
             while (count < mines) {
 
@@ -70,7 +86,7 @@ public class Game {
 
             }
         }
-        if (firstClick == 0) {
+        if (firstClick) {
             int[] dr = {-1, -1, 0, 1, 1, 1, 0, -1};
             int[] dc = {0, 1, 1, 1, 0, -1, -1, -1};
 
@@ -91,39 +107,42 @@ public class Game {
                 }
             }
         }
-        firstClick++;
+        firstClick = false;
     }
 
     public void floodFill(int row, int col) {
-        if(row<0 || row>height-1 || col<0 || col>width-1) {
+        if (row < 0 || row > height - 1 || col < 0 || col > width - 1) {
             return;
         }
 
-        if(data[row][col]==0) {
-            data[row][col] = 8;
+        if (data[row][col] == 0) {
+            data[row][col] = -1;
 
             floodFill(row + 1, col);
             floodFill(row, col + 1);
             floodFill(row - 1, col);
             floodFill(row, col - 1);
 
-            floodFill(row-1, col+1);
-            floodFill(row+1, col+1);
-            floodFill(row+1, col-1);
-            floodFill(row-1, col-1);
+            floodFill(row - 1, col + 1);
+            floodFill(row + 1, col + 1);
+            floodFill(row + 1, col - 1);
+            floodFill(row - 1, col - 1);
         }
-
-
 
 
     }
 
-    public void right(int row, int col) {
+    public void right(int row, int col, ArrayList<Flag> flags) {
         if (row < 0 || row >= height) {
             throw new RuntimeException("Incorrect row: " + row);
         }
         if (col < 0 || col >= width) {
             throw new RuntimeException("Incorrect column: " + col);
         }
+        this.flags = flags;
+
+
     }
+
 }
+
