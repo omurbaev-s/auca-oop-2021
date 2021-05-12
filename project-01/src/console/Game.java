@@ -9,6 +9,7 @@ public class Game {
     int mines;
     int[][] data;
     boolean firstClick;
+    boolean bomb;
 
     ArrayList<Flag> flags = new ArrayList<>();
 
@@ -28,6 +29,7 @@ public class Game {
         this.mines = mines;
         this.data = new int[height][width];
         this.firstClick = true;
+        this.bomb=false;
 
     }
 
@@ -39,15 +41,26 @@ public class Game {
 
                 for (int i = 0; i < height; i++) {
                     for (int j = 0; j < width; j++) {
-                        if(flags.contains(new Flag(i, j))){
-                            r.append('F');
-                        }else if(data[i][j]==-1){
-                            r.append('#');
-                        } else if(isClear(i,j)){
-                            r.append('.');
-                        }
-                        else {
-                            r.append(data[i][j]);
+                        if(!bomb) {
+                            if (flags.contains(new Flag(i, j))) {
+                                r.append('F');
+                            } else if (data[i][j] == -1) {
+                                r.append('#');
+                            } else if (isClear(i, j)) {
+                                r.append('.');
+                            } else {
+                                r.append(data[i][j]);
+                            }
+                        } else {
+                            if(data[i][j]==-1){
+                                data[i][j]=0;
+                            }
+                            if (data[i][j] == 9) {
+                                r.append('*');
+                            } else {
+                                r.append(data[i][j]);
+                            }
+
                         }
 
                     }
@@ -126,7 +139,15 @@ public class Game {
                 }
             }
         }
+        if(!firstClick && data[row][col]==9){
+            bomb=true;
+        }
+
         firstClick = false;
+    }
+
+    public boolean isBomb() {
+        return bomb;
     }
 
     public void floodFill(int row, int col) {

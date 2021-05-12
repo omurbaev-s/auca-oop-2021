@@ -25,6 +25,9 @@ public class Main {
             System.out.println(game);
             System.out.println(flags);
             System.out.print("cmd: ");
+            if(game.isBomb()){
+                break;
+            }
             String cmdLine = inp.nextLine().trim();
             if(cmdLine.equals("quit")){
                 break;
