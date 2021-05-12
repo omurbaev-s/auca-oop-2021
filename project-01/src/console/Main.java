@@ -30,6 +30,9 @@ public class Main {
             }
             String cmdLine = inp.nextLine().trim();
             if(cmdLine.equals("quit")){
+                if(game.firstClick){
+                    System.out.println("\nThe field will be mined after first left click");
+                }
                 break;
             }
 
@@ -66,6 +69,7 @@ public class Main {
                     }
             }
         }
+        System.out.println("Next time you will be better");
         System.out.println("Bye");
     }
 

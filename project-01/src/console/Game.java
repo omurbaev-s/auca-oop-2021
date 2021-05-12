@@ -10,6 +10,9 @@ public class Game {
     int[][] data;
     boolean firstClick;
     boolean bomb;
+    int row;
+    int col;
+    boolean open;
 
     ArrayList<Flag> flags = new ArrayList<>();
 
@@ -30,6 +33,7 @@ public class Game {
         this.data = new int[height][width];
         this.firstClick = true;
         this.bomb=false;
+        this.open=false;
 
     }
 
@@ -46,6 +50,12 @@ public class Game {
                                 r.append('F');
                             } else if (data[i][j] == -1) {
                                 r.append('#');
+                            }else if(open){
+                                if(i==row && j==col){
+                                    r.append(data[i][j]);
+                                }
+                                open=false;
+
                             } else if (isClear(i, j)) {
                                 r.append('.');
                             } else {
@@ -142,9 +152,21 @@ public class Game {
         if(!firstClick && data[row][col]==9){
             bomb=true;
         }
+        if(!firstClick && data[row][col]!=9){
+           open = openCell(row,col);
+
+        }
 
         firstClick = false;
     }
+
+    private boolean openCell(int row, int col) {
+        this.row=row;
+        this.col=col;
+
+        return true;
+    }
+
 
     public boolean isBomb() {
         return bomb;
