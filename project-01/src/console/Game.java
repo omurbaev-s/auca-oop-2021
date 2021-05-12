@@ -41,7 +41,12 @@ public class Game {
                     for (int j = 0; j < width; j++) {
                         if(flags.contains(new Flag(i, j))){
                             r.append('F');
-                        }else {
+                        }else if(data[i][j]==-1){
+                            r.append('#');
+                        } else if(isClear(i,j)){
+                            r.append('.');
+                        }
+                        else {
                             r.append(data[i][j]);
                         }
 
@@ -56,6 +61,20 @@ public class Game {
 
 
         return r.toString();
+    }
+
+    private boolean isClear(int r, int c) {
+        int[] dr = {-1, -1, 0, 1, 1, 1, 0, -1};
+        int[] dc = {0, 1, 1, 1, 0, -1, -1, -1};
+        int clear=0;
+        for (int i = 0; i < dr.length; i++) {
+            int tr = r + dr[i];
+            int tc = c + dc[i];
+            if (tr >= 0 && tr < height && tc >= 0 && tc < width && data[tr][tc]==-1){
+                clear++;
+            }
+        }
+        return clear == 0;
     }
 
     public void left(int row, int col) {
