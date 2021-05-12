@@ -23,7 +23,7 @@ public class Main {
 
         for (; ; ) {
             System.out.println(game);
-            System.out.println(flags);
+            System.out.println(game.opened);
             System.out.print("cmd: ");
             if(game.isBomb()){
                 break;
