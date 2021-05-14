@@ -26,7 +26,7 @@ public class Game {
             throw new RuntimeException("Game: width is less than one: " + width);
         }
         if (mines < 1 || mines >= width * height) {
-            throw new RuntimeException("Game: incorrect number of mines: " + mines);
+            throw new RuntimeException("Incorrect mode: mines >= width * height");
         }
         this.height = height;
         this.width = width;
@@ -111,10 +111,10 @@ public class Game {
     public void left(int row, int col) {
 
         if (row < 0 || row >= height) {
-            throw new RuntimeException("Incorrect row: " + row);
+            throw new RuntimeException("\nIncorrect row: " + row);
         }
         if (col < 0 || col >= width) {
-            throw new RuntimeException("Incorrect column: " + col);
+            throw new RuntimeException("\nIncorrect column: " + col);
         }
 
 
@@ -197,10 +197,10 @@ public class Game {
 
     public void right(int row, int col, ArrayList<Flag> flags) {
         if (row < 0 || row >= height) {
-            throw new RuntimeException("Incorrect row: " + row);
+            throw new RuntimeException("\nIncorrect row: " + row);
         }
         if (col < 0 || col >= width) {
-            throw new RuntimeException("Incorrect column: " + col);
+            throw new RuntimeException("\nIncorrect column: " + col);
         }
         this.flags = flags;
 

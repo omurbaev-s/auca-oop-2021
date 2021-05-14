@@ -12,6 +12,7 @@ public class Main {
 
         try {
             game = parseArgs(args);
+            System.out.println(getHelp());
         } catch (NumberFormatException e) {
             System.out.println("Incorrect integer values in command line arguments: " + Arrays.toString(args));
             System.exit(1);
@@ -23,20 +24,22 @@ public class Main {
 
         for (; ; ) {
             System.out.println(game);
-            System.out.println(game.opened);
             if(game.win){
                 System.out.println("Congratulations!");
                 break;
             }
-            System.out.print("cmd: ");
             if(game.isBomb()){
                 System.out.println("Next time you will be better");
                 break;
             }
+            System.out.print("cmd: ");
             String cmdLine = inp.nextLine().trim();
             if(cmdLine.equals("quit")){
                 if(game.firstClick){
                     System.out.println("\nThe field will be mined after first left click");
+                    System.out.println("Next time you will be better");
+                }else {
+                    System.out.println("\nNext time you will be better");
                 }
                 break;
             }
@@ -51,31 +54,42 @@ public class Main {
                         int col = cmdInp.nextInt();
                         game.left(row, col);
                         game.floodFill(row, col);
+                        System.out.println();
                         break;
                     }catch (RuntimeException e){
                         System.out.println(e.getMessage());
+                        break;
                     }
                 case "right":
                     try{
                         int row = cmdInp.nextInt();
                         int col = cmdInp.nextInt();
-                        Flag flag = new Flag(row, col);
+                        if(!game.firstClick) {
+                            Flag flag = new Flag(row, col);
 
-                        if(flags.contains(flag)){
-                            flags.remove(flag);
-                        } else{
-                            flags.add(flag);
+                            if (flags.contains(flag)) {
+                                flags.remove(flag);
+                            } else {
+                                flags.add(flag);
+                            }
+                            game.right(row, col, flags);
+                            System.out.println();
+                            break;
+                        }else{
+                            System.out.println("The field will be mined after first left click\n");
                         }
-                        game.right(row, col, flags);
-                        break;
-
                     }catch (RuntimeException e){
                         System.out.println(e.getMessage());
+                        break;
                     }
+                case "help":
+                    System.out.println(getHelp());
+                    break;
             }
         }
         System.out.println("Bye");
     }
+
 
     static Game parseArgs(String[] args){
         int width = 9;
@@ -91,7 +105,24 @@ public class Main {
                 mines = Integer.parseInt(args[2]);
                 return new Game(height,width,mines);
             }
-            throw new RuntimeException("Incorrect number of command line arguments");
 
+            throw new RuntimeException("Incorrect app args: "+Arrays.toString(args).replace('[',' ').replace(']',' ').trim());
+
+    }
+
+    private static StringBuilder getHelp() {
+        StringBuilder help = new StringBuilder();
+        help.append("Help:\n");
+        help.append("left <row> <col>\n");
+        help.append("    - left click with coordinates (row, col)\n");
+        help.append("right <row> <col>\n");
+        help.append("    - right click with coordinates (row, col)\n");
+        help.append("show\n");
+        help.append("    - show all mines (cheating\n");
+        help.append("quit\n");
+        help.append("    - quit the game (EOF works too\n");
+        help.append("help\n");
+        help.append("    - this text\n");
+        return help;
     }
 }
