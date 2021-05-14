@@ -13,6 +13,7 @@ public class Game {
     int row;
     int col;
     boolean win;
+    boolean show;
 
     ArrayList<Flag> flags = new ArrayList<>();
     ArrayList<Flag> opened = new ArrayList<>();
@@ -35,31 +36,46 @@ public class Game {
         this.firstClick = true;
         this.bomb=false;
         this.win=false;
+        this.show=false;
 
     }
 
     @Override
     public String toString() {
-        String header = String.format("Minesweeper: height = %d, width = %d, mines = %d\n", height, width, mines);
-
+        String header;
+        if(height==9 && width==9 && mines==10) {
+            header = String.format("Minesweeper: BEGINNER, height = %d, width = %d, mines = %d, flags = %d\n", height, width, mines, flags.size());
+        } else if(height==16 && width==16 && mines==40){
+            header = String.format("Minesweeper: INTERMEDIATE, height = %d, width = %d, mines = %d, flags = %d\n", height, width, mines, flags.size());
+        } else if(height==16 && width==30 && mines==99){
+            header = String.format("Minesweeper: EXPERT, height = %d, width = %d, mines = %d, flags = %d\n", height, width, mines, flags.size());
+        } else{
+            header = String.format("Minesweeper: CUSTOM, height = %d, width = %d, mines = %d, flags = %d\n", height, width, mines, flags.size());
+        }
         StringBuilder r = new StringBuilder(header);
 
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
                 if (!bomb) {
-                    if (flags.contains(new Flag(i, j))) {
-                        r.append('F');
-                    } else if (data[i][j] == -1) {
-                        r.append('#');
-                    } else if (isClear(i, j)) {
-                        if (opened.contains(new Flag(i, j))) {
-                            r.append(data[i][j]);
+                        if (flags.contains(new Flag(i, j))) {
+                            r.append('F');
+                        } else if (data[i][j] == -1) {
+                            r.append('#');
+                        } else if (isClear(i, j)) {
+                            if (opened.contains(new Flag(i, j))) {
+                                r.append(data[i][j]);
+                            } else if(show){
+                                if(data[i][j]==9){
+                                    r.append('*');
+                                } else {
+                                    r.append('.');
+                                }
+                            } else {
+                                r.append('.');
+                            }
                         } else {
-                            r.append('.');
+                            r.append(data[i][j]);
                         }
-                    } else {
-                        r.append(data[i][j]);
-                    }
                 } else {
                     if (data[i][j] == -1) {
                         data[i][j] = 0;
@@ -69,25 +85,27 @@ public class Game {
                     } else {
                         r.append(data[i][j]);
                     }
-
                 }
-
             }
             if (i != height - 1) {
                 r.append("\n");
             }
         }
+        show=false;
         win=isWin(r);
         return r.toString();
     }
     public boolean isWin(StringBuilder r) {
         int counter=0;
+        int c=0;
         for(int i=0; i<r.length(); i++){
             if(r.charAt(i)=='.' || r.charAt(i)=='F'){
                 counter++;
+            }else if(r.charAt(i)=='*'){
+                c++;
             }
         }
-        if(counter==mines) {
+        if(counter==mines && c==0) {
             win = true;
         }
         return win;
@@ -111,10 +129,10 @@ public class Game {
     public void left(int row, int col) {
 
         if (row < 0 || row >= height) {
-            throw new RuntimeException("\nIncorrect row: " + row);
+            throw new RuntimeException("Incorrect row: " + row+"\n");
         }
         if (col < 0 || col >= width) {
-            throw new RuntimeException("\nIncorrect column: " + col);
+            throw new RuntimeException("Incorrect column: " + col+"\n");
         }
 
 
@@ -197,15 +215,18 @@ public class Game {
 
     public void right(int row, int col, ArrayList<Flag> flags) {
         if (row < 0 || row >= height) {
-            throw new RuntimeException("\nIncorrect row: " + row);
+            throw new RuntimeException("Incorrect row: " + row+"\n");
         }
         if (col < 0 || col >= width) {
-            throw new RuntimeException("\nIncorrect column: " + col);
+            throw new RuntimeException("Incorrect column: " + col+"\n");
         }
         this.flags = flags;
 
 
     }
 
+    public void show() {
+        show=true;
+    }
 }
 
