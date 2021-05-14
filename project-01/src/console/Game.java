@@ -213,14 +213,21 @@ public class Game {
 
     }
 
-    public void right(int row, int col, ArrayList<Flag> flags) {
+    public void right(int row, int col) {
         if (row < 0 || row >= height) {
             throw new RuntimeException("Incorrect row: " + row+"\n");
         }
         if (col < 0 || col >= width) {
             throw new RuntimeException("Incorrect column: " + col+"\n");
         }
-        this.flags = flags;
+
+        Flag flag = new Flag(row, col);
+
+        if (flags.contains(flag)) {
+            flags.remove(flag);
+        } else {
+            flags.add(flag);
+        }
 
 
     }

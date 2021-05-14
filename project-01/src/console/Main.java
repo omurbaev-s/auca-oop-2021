@@ -9,7 +9,6 @@ public class Main {
     static Scanner inp = new Scanner(System.in);
     public static void main(String[] args) {
         Game game = null;
-        ArrayList<Flag> flags = new ArrayList<>();
 
         try {
             game = parseArgs(args);
@@ -70,14 +69,7 @@ public class Main {
                             int row = cmdInp.nextInt();
                             int col = cmdInp.nextInt();
                             if (!game.firstClick) {
-                                Flag flag = new Flag(row, col);
-
-                                if (flags.contains(flag)) {
-                                    flags.remove(flag);
-                                } else {
-                                    flags.add(flag);
-                                }
-                                game.right(row, col, flags);
+                                game.right(row, col);
                                 System.out.println();
                                 break;
                             } else {
