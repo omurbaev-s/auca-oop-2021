@@ -12,6 +12,7 @@ public class Game {
     boolean bomb;
     int row;
     int col;
+    boolean win;
 
     ArrayList<Flag> flags = new ArrayList<>();
     ArrayList<Flag> opened = new ArrayList<>();
@@ -33,6 +34,7 @@ public class Game {
         this.data = new int[height][width];
         this.firstClick = true;
         this.bomb=false;
+        this.win=false;
 
     }
 
@@ -42,45 +44,54 @@ public class Game {
 
         StringBuilder r = new StringBuilder(header);
 
-                for (int i = 0; i < height; i++) {
-                    for (int j = 0; j < width; j++) {
-                        if(!bomb) {
-                            if (flags.contains(new Flag(i, j))) {
-                                r.append('F');
-                            } else if (data[i][j] == -1) {
-                                r.append('#');
-                            }else if (isClear(i, j)) {
-                                if(opened.contains(new Flag(i,j))){
-                                    r.append(data[i][j]);
-                                }else {
-                                    r.append('.');
-                                }
-                            } else {
-                                r.append(data[i][j]);
-                            }
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                if (!bomb) {
+                    if (flags.contains(new Flag(i, j))) {
+                        r.append('F');
+                    } else if (data[i][j] == -1) {
+                        r.append('#');
+                    } else if (isClear(i, j)) {
+                        if (opened.contains(new Flag(i, j))) {
+                            r.append(data[i][j]);
                         } else {
-                            if(data[i][j]==-1){
-                                data[i][j]=0;
-                            }
-                            if (data[i][j] == 9) {
-                                r.append('*');
-                            } else {
-                                r.append(data[i][j]);
-                            }
-
+                            r.append('.');
                         }
+                    } else {
+                        r.append(data[i][j]);
+                    }
+                } else {
+                    if (data[i][j] == -1) {
+                        data[i][j] = 0;
+                    }
+                    if (data[i][j] == 9) {
+                        r.append('*');
+                    } else {
+                        r.append(data[i][j]);
+                    }
 
-                    }
-                    if (i != height - 1) {
-                        r.append("\n");
-                    }
                 }
 
-
-
-
-
+            }
+            if (i != height - 1) {
+                r.append("\n");
+            }
+        }
+        win=isWin(r);
         return r.toString();
+    }
+    public boolean isWin(StringBuilder r) {
+        int counter=0;
+        for(int i=0; i<r.length(); i++){
+            if(r.charAt(i)=='.' || r.charAt(i)=='F'){
+                counter++;
+            }
+        }
+        if(counter==mines) {
+            win = true;
+        }
+        return win;
+
     }
 
     private boolean isClear(int r, int c) {

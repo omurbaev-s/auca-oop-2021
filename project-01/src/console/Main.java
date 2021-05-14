@@ -24,8 +24,13 @@ public class Main {
         for (; ; ) {
             System.out.println(game);
             System.out.println(game.opened);
+            if(game.win){
+                System.out.println("Congratulations!");
+                break;
+            }
             System.out.print("cmd: ");
             if(game.isBomb()){
+                System.out.println("Next time you will be better");
                 break;
             }
             String cmdLine = inp.nextLine().trim();
@@ -69,7 +74,6 @@ public class Main {
                     }
             }
         }
-        System.out.println("Next time you will be better");
         System.out.println("Bye");
     }
 
