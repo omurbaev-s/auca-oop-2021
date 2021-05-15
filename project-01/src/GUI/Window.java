@@ -11,8 +11,8 @@ public class Window {
         this.main=main;
         this.x=x;
         this.y=y;
-        this.width=width;
-        this.height=height;
+        this.width=Math.round(width/9f);
+        this.height=Math.round(height/9f);
     }
 
     public float getY() {
@@ -34,5 +34,13 @@ public class Window {
         main.fill(50);
         main.rect(x,y,width,height);
 
+    }
+
+    public float h() {
+        return this.y+(height*9);
+    }
+
+    public float w() {
+        return this.x+(width*9);
     }
 }
