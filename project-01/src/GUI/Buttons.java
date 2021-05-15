@@ -24,33 +24,26 @@ public class Buttons {
 
     }
 
-    public void draw(/*float x, float y, float width, float height*/) {
-//        this.width = Math.round(width / 9f);
-//        this.height = Math.round(height / 9f);
-//        float dw = this.width / 10f;
-//        float dh = this.height / 10f;
-//        for (float i = y; i < y + (this.height * 9); i += this.height) {
-//            for (float j = x; j < x + (this.width * 9); j += this.width) {
-//                this.x = j + dw;
-//                this.y = i + dh;
-//                if (isPressed || main.mousePressed && contains(main.mouseX, main.mouseY)) {
+    public void draw() {
+        float dw = this.width / 10f;
+        float dh = this.height / 10f;
+                float x1 = this.x + dw;
+                float y1 = this.y + dh;
+                if (isPressed || main.mousePressed && contains(main.mouseX, main.mouseY)) {
                     main.fill(DARK_GRAY);
-//                    main.stroke(DARK_GRAY);
+                    main.stroke(DARK_GRAY);
                     main.rect(x, y, this.width, this.height);
-//                    main.fill(PRESS_GRAY);
-//                    main.stroke(PRESS_GRAY);
-//                    main.rect(this.x, this.y, this.width - 2 * dw, this.height - 2 * dh);
-//                } else {
-//                    main.fill(DARK_GRAY);
-//                    main.stroke(DARK_GRAY);
-//                    main.rect(x, y, this.width, this.height);
-//                    main.fill(LIGHT_GRAY);
-//                    main.stroke(LIGHT_GRAY);
-//                    main.rect(this.x, this.y, this.width - 2 * dw, this.height - 2 * dh);
-//                }
-
-//            }
-//        }
+                    main.fill(PRESS_GRAY);
+                    main.stroke(PRESS_GRAY);
+                    main.rect(x1, y1, this.width - 2 * dw, this.height - 2 * dh);
+                } else {
+                    main.fill(DARK_GRAY);
+                    main.stroke(DARK_GRAY);
+                    main.rect(x, y, this.width, this.height);
+                    main.fill(LIGHT_GRAY);
+                    main.stroke(LIGHT_GRAY);
+                    main.rect(x1, y1, this.width - 2 * dw, this.height - 2 * dh);
+                }
     }
     public boolean contains(int mouseX, int mouseY) {
         return mouseX>=this.x && mouseX<=this.x+width && mouseY>=this.y && mouseY<=this.y+height;

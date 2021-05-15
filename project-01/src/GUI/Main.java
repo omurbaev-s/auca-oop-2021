@@ -25,9 +25,9 @@ public class Main extends PApplet {
     }
 
     public void draw() {
-        background(255);
+        background(0);
         for(Buttons button : buttons) {
-            button.draw(/*window.getX(),window.getY(),window.getWidth(),window.getHeight()*/);
+            button.draw();
         }
     }
 //    public void mouseReleased(){

@@ -30,12 +30,6 @@ public class Window {
         return height;
     }
 
-    public void draw() {
-        main.fill(50);
-        main.rect(x,y,width,height);
-
-    }
-
     public float h() {
         return this.y+(height*9);
     }
