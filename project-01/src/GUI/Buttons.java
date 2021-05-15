@@ -10,46 +10,55 @@ public class Buttons {
     private float width;
     private float height;
     private boolean isPressed;
+    private Actionable action;
+    private boolean first;
 
-    public Buttons(Main main, int x, int y, int width, int height) {
+    public Buttons(Main main, float x, float y, float width, float height, Actionable action) {
         this.main = main;
+        this.action=action;
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
         this.isPressed = false;
+        this.first=true;
     }
 
     public void draw(float x, float y, float width, float height) {
-        this.width = Math.round(width / 9f);
+        if (first){
+            this.width = Math.round(width / 9f);
         this.height = Math.round(height / 9f);
         float dw = this.width / 10f;
         float dh = this.height / 10f;
-
         for (float i = y; i < y + (this.height * 9); i += this.height) {
             for (float j = x; j < x + (this.width * 9); j += this.width) {
-                float x1 = j + dw;
-                float y1 = i + dh;
-                if (isPressed || main.mousePressed && contains(main.mouseX, main.mouseY, i, j, this.width, this.height)) {
+                this.x = j + dw;
+                this.y = i + dh;
+                if (isPressed || main.mousePressed && contains(main.mouseX, main.mouseY)) {
                     main.fill(DARK_GRAY);
                     main.stroke(DARK_GRAY);
                     main.rect(j, i, this.width, this.height);
                     main.fill(PRESS_GRAY);
                     main.stroke(PRESS_GRAY);
-                    main.rect(x1, y1, this.width - 2 * dw, this.height - 2 * dh);
+                    main.rect(this.x, this.y, this.width - 2 * dw, this.height - 2 * dh);
                 } else {
                     main.fill(DARK_GRAY);
                     main.stroke(DARK_GRAY);
                     main.rect(j, i, this.width, this.height);
                     main.fill(LIGHT_GRAY);
                     main.stroke(LIGHT_GRAY);
-                    main.rect(x1, y1, this.width - 2 * dw, this.height - 2 * dh);
+                    main.rect(this.x, this.y, this.width - 2 * dw, this.height - 2 * dh);
                 }
 
             }
         }
     }
-    private boolean contains(int mouseX, int mouseY, float i, float j, float width, float height) {
-        return mouseX>=j && mouseX<=j+width && mouseY>=i && mouseY<=i+height;
+    }
+    public boolean contains(int mouseX, int mouseY) {
+        return mouseX>=this.x && mouseX<=this.x+width && mouseY>=this.y && mouseY<=this.y+height;
+    }
+
+    public void performAction() {
+        action.perform();
     }
 }
