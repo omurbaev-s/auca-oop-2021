@@ -10,12 +10,12 @@ public class Buttons {
     private float width;
     private float height;
     private boolean isPressed;
-   // private Actionable action;
+    private Actionable action;
 
 
-    public Buttons(Main main, float x, float y, float width, float height/*, Actionable action*/) {
+    public Buttons(Main main, float x, float y, float width, float height, Actionable action) {
         this.main = main;
-       // this.action=action;
+        this.action=action;
         this.x = x;
         this.y = y;
         this.width = width;
@@ -49,7 +49,7 @@ public class Buttons {
         return mouseX>=this.x && mouseX<=this.x+width && mouseY>=this.y && mouseY<=this.y+height;
     }
 
-//    public void performAction() {
-//        action.perform();
-//    }
+    public void performAction() {
+        action.perform();
+    }
 }

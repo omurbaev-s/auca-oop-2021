@@ -18,9 +18,24 @@ public class Main extends PApplet {
 
         for(float i=window.getY(); i<window.h(); i+=window.getHeight()){
             for(float j=window.getX(); j<window.w(); j+=window.getWidth()){
-                buttons.add(new Buttons(this, j, i, window.getWidth(), window.getHeight()));
+                buttons.add(new Buttons(this, j, i, window.getWidth(), window.getHeight(), () ->{
+
+                }));
             }
         }
+        buttons.add(new Buttons(this, window.getWidth()+window.w(), window.getHeight()+window.getY(), width/7f,1.5f*window.getHeight(),() ->{
+
+        }));
+        buttons.add(new Buttons(this, window.getWidth()+window.w(), 4*window.getHeight()+window.getY(), width/7f,1.5f*window.getHeight(),() ->{
+
+        }));
+        buttons.add(new Buttons(this, window.getWidth()+window.w(), 7*window.getHeight()+window.getY(), width/7f,1.5f*window.getHeight(),() ->{
+
+        }));
+        buttons.add(new Buttons(this, width/2f, window.getY()-window.getHeight()*2.5f, 2*window.getWidth(),2*window.getHeight(),() ->{
+
+        }));
+
 
     }
 
