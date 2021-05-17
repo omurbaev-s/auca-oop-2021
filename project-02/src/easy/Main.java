@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
 
 public class Main extends JFrame {
     CanvasPanel mainPanel;
@@ -42,25 +43,43 @@ public class Main extends JFrame {
     class CanvasPanel extends JPanel {
         @Override
         protected void paintComponent(Graphics g) {
-            int xLeftUpper = getWidth()/4;
-            int yLeftUpper = getHeight()/4;
-            int widthCell = Math.round(getWidth() /2f/ game.maze.getWidth());
-            int heightCell = Math.round(getHeight() /2f/ game.maze.getHeight());
+            super.paintComponent(g);
+
+            int widthCell = images.ground.getWidth();
+            int heightCell = images.ground.getHeight();
+
+            int xLeftUpper = getWidth()/2 - widthCell*game.maze.getWidth()/2;
+            int yLeftUpper = getHeight()/2 - heightCell*game.maze.getHeight()/2;
+
             for (int r = 0; r < game.maze.getHeight(); r++) {
                 for (int c = 0; c < game.maze.getWidth(); c++) {
-                    Color curColor = game.maze.getCurElement(r,c) == '#' ? Color.DARK_GRAY: Color.GREEN;
-                    g.setColor(curColor);
-                    g.fillRect(xLeftUpper+c * widthCell, yLeftUpper+r * heightCell, widthCell, heightCell);
-                    g.setColor(Color.BLACK);
-                    g.drawRect(xLeftUpper+c * widthCell, yLeftUpper+r * heightCell, widthCell, heightCell);
+                    switch (game.maze.get(r, c)) {
+                        case ' ':
+                            drawImage(g, images.ground,
+                                    xLeftUpper + c * widthCell, yLeftUpper + r * heightCell, widthCell, heightCell );
+                            break;
+                        case '#':
+                            drawImage(g, images.wall,
+                                    xLeftUpper + c * widthCell, yLeftUpper + r * heightCell, widthCell, heightCell);
+                            break;
+                    }
                 }
             }
+            drawImage(g, images.goal,
+                    xLeftUpper+game.maze.getExitCol()*widthCell,
+                    yLeftUpper+game.maze.getExitRow()*heightCell,
+                    widthCell,heightCell);
 
-            g.setColor(Color.YELLOW);
-            g.fillOval(xLeftUpper+game.maze.getExitCol()*widthCell,yLeftUpper+game.maze.getExitRow()*heightCell, widthCell,heightCell);
-            g.setColor(Color.RED);
-            g.fillOval(xLeftUpper+game.maze.getRobotCol()*widthCell,yLeftUpper+game.maze.getRobotRow()*heightCell, widthCell,heightCell);
+            drawImage(g, images.robot,
+                    xLeftUpper+game.maze.getRobotCol()*widthCell,
+                    yLeftUpper+game.maze.getRobotRow()*heightCell,
+                    widthCell,heightCell);
+         }
 
+        private void drawImage(Graphics g, BufferedImage img, int x, int y, int width, int height) {
+            int leftX = x + width / 2 - img.getWidth() / 2;
+            int leftY = y + height /2 - img.getHeight() / 2;
+            g.drawImage(img,leftX,leftY,null);
         }
     }
     class CanvasPanelListener extends KeyAdapter{
