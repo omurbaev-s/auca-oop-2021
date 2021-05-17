@@ -71,6 +71,12 @@ public class Main extends JFrame {
                         yLeftUpper + game.maze.exits.get(i).getExitRow() * heightCell,
                         widthCell, heightCell);
             }
+            for(int i=0; i<game.maze.boxes.size(); i++){
+                drawImage(g, images.bBox,
+                        xLeftUpper + game.maze.boxes.get(i).getBCol() * widthCell,
+                        yLeftUpper + game.maze.boxes.get(i).getBRow() * heightCell,
+                        widthCell, heightCell);
+            }
 
             drawImage(g, images.robot,
                     xLeftUpper+game.maze.getRobotCol()*widthCell,
@@ -92,12 +98,16 @@ public class Main extends JFrame {
                 JOptionPane.showMessageDialog(null,"Move robot using arrows!!!");
             } else if(e.getKeyCode()==KeyEvent.VK_UP){
                 game.maze.move(-1,0);
+
             } else if(e.getKeyCode()==KeyEvent.VK_DOWN){
                 game.maze.move(1,0);
+
             } else if(e.getKeyCode()==KeyEvent.VK_LEFT){
                 game.maze.move(0,-1);
+
             } else if(e.getKeyCode()==KeyEvent.VK_RIGHT){
                 game.maze.move(0,1);
+
             }
             repaint();
             if(game.maze.isWin()){

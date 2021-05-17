@@ -10,9 +10,13 @@ public class Maze {
 
     private int robotRow;
     private int robotCol;
+    private int boxRow;
+    private int boxCol;
     protected ArrayList<Exit> exits;
+    protected ArrayList<Box> boxes;
 
     public Maze(char[][] level){
+        boxes=new ArrayList<>();
         exits=new ArrayList<>();
         height=level.length;
         width=level[0].length;
@@ -27,6 +31,11 @@ public class Maze {
                 } else if(level[r][c]=='E'){
                     exits.add(new Exit(r,c));
                     data[r][c]=' ';
+                } else if(level[r][c]=='B'){
+                    boxRow=r;
+                    boxCol=c;
+                    boxes.add(new Box(r,c));
+                    data[r][c]='B';
                 } else{
                     data[r][c]=level[r][c];
                 }
@@ -58,15 +67,29 @@ public class Maze {
         return data[row][col];
     }
 
-    public void move(int dr, int dc ) {
+    public void move(int dr, int dc) {
         int tRow = robotRow+dr;
         int tCol = robotCol+dc;
+        int bRow = tRow+dr;
+        int bCol = tCol+dc;
 
         if(data[tRow][tCol]==' '){
             robotRow=tRow;
             robotCol=tCol;
+        }else if(data[tRow][tCol]=='B' && data[bRow][bCol]==' '){
+            robotRow=tRow;
+            robotCol=tCol;
+            boxRow=bRow;
+            boxCol=bCol;
+            data[tRow][tCol]=' ';
+            data[bRow][bCol]='B';
         }
     }
+//    public void moveBox(int dr, int dc) {
+//        int tRow = boxRow+dr;
+//        int tCol = boxCol+dc;
+//        if(data)
+//    }
 
     public boolean isWin() {
         boolean win=false;
@@ -79,4 +102,5 @@ public class Maze {
         return win;
 
     }
+
 }
