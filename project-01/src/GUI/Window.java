@@ -2,12 +2,12 @@ package GUI;
 
 public class Window {
     private Main main;
-    private int x;
-    private int y;
+    private float x;
+    private float y;
     private float width;
     private float height;
 
-    public Window(Main main, int x, int y, float width, float height){
+    public Window(Main main, float x, float y, float width, float height){
         this.main=main;
         this.x=x;
         this.y=y;
@@ -15,11 +15,11 @@ public class Window {
         this.height=Math.round(height/9f);
     }
 
-    public int getY() {
+    public float getY() {
         return y;
     }
 
-    public int getX() {
+    public float getX() {
         return x;
     }
 

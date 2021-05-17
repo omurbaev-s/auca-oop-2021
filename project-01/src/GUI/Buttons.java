@@ -11,8 +11,6 @@ public class Buttons {
     protected float height;
     private boolean isPressed;
     private Actionable action;
-    private float w;
-    private float h;
 
 
     public Buttons(Main main, float x, float y, float width, float height, Actionable action) {
@@ -30,8 +28,8 @@ public class Buttons {
     public void draw() {
         float dw = this.width / 10f;
         float dh = this.height / 10f;
-        this.w=width-2*dw;
-        this.h=height-2*dh;
+        float w=width-2*dw;
+        float h=height-2*dh;
                 float x1 = this.x + dw;
                 float y1 = this.y + dh;
                 if (isPressed || main.mousePressed && contains(main.mouseX, main.mouseY) ) {
@@ -51,7 +49,7 @@ public class Buttons {
                 }
     }
     public boolean contains(int mouseX, int mouseY) {
-        return mouseX>=this.x && mouseX<=this.x+width && mouseY>=this.y && mouseY<=this.y+height;
+        return mouseX>=this.x+(width/10f) && mouseX<=this.x+(width/10f)+width-(2*(width/10f)) && mouseY>=this.y+(height/10f) && mouseY<=this.y+(height/10f)+height-(2*(height/10f));
     }
 
     public void performAction() {
