@@ -25,7 +25,7 @@ public class Main extends JFrame {
         mainPanel.addKeyListener(new CanvasPanelListener());
 
         setTitle("Sokoban");
-        setSize(600,600);
+        setSize(800,800);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
@@ -65,10 +65,12 @@ public class Main extends JFrame {
                     }
                 }
             }
-            drawImage(g, images.goal,
-                    xLeftUpper+game.maze.getExitCol()*widthCell,
-                    yLeftUpper+game.maze.getExitRow()*heightCell,
-                    widthCell,heightCell);
+            for(int i=0; i<game.maze.exits.size(); i++) {
+                drawImage(g, images.goal,
+                        xLeftUpper + game.maze.exits.get(i).getExitCol() * widthCell,
+                        yLeftUpper + game.maze.exits.get(i).getExitRow() * heightCell,
+                        widthCell, heightCell);
+            }
 
             drawImage(g, images.robot,
                     xLeftUpper+game.maze.getRobotCol()*widthCell,

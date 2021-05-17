@@ -1,5 +1,7 @@
 package easy;
 
+import java.util.ArrayList;
+
 public class Maze {
     private char[][] data;
 
@@ -8,10 +10,10 @@ public class Maze {
 
     private int robotRow;
     private int robotCol;
-    private int exitRow;
-    private int exitCol;
+    protected ArrayList<Exit> exits;
 
     public Maze(char[][] level){
+        exits=new ArrayList<>();
         height=level.length;
         width=level[0].length;
         data = new char[height][width];
@@ -23,8 +25,7 @@ public class Maze {
                     robotCol=c;
                     data[r][c]=' ';
                 } else if(level[r][c]=='E'){
-                    exitRow=r;
-                    exitCol=c;
+                    exits.add(new Exit(r,c));
                     data[r][c]=' ';
                 } else{
                     data[r][c]=level[r][c];
@@ -53,13 +54,6 @@ public class Maze {
         return robotRow;
     }
 
-    public int getExitCol() {
-        return exitCol;
-    }
-
-    public int getExitRow() {
-        return exitRow;
-    }
     public char getCurElement(int row, int col){
         return data[row][col];
     }
@@ -75,6 +69,14 @@ public class Maze {
     }
 
     public boolean isWin() {
-        return robotRow==exitRow && robotCol==exitCol;
+        boolean win=false;
+        for(int i=0; i<exits.size(); i++){
+            if(robotRow==exits.get(i).getExitRow() && robotCol==exits.get(i).getExitCol()){
+                win=true;
+                break;
+            }
+        }
+        return win;
+
     }
 }
