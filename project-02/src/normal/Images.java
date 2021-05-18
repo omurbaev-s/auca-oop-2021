@@ -15,8 +15,10 @@ public class Images {
     BufferedImage goal;
     BufferedImage bBox;
     BufferedImage rBox;
+    BufferedImage direction;
 
     public Images()throws IOException {
+        direction = ImageIO.read(new File("images/RobotD.png"));
         robotD = ImageIO.read(new File("images/RobotD.png"));
         robotU = ImageIO.read(new File("images/RobotU.png"));
         robotL = ImageIO.read(new File("images/RobotL.png"));
@@ -27,4 +29,26 @@ public class Images {
         bBox =  ImageIO.read(new File("images/BoxBlue.png"));
         rBox =  ImageIO.read(new File("images/BoxRed.png"));
     }
+
+    public BufferedImage getDirection() {
+        return direction;
+    }
+
+    public void direction(String direction) {
+        switch (direction) {
+            case "up":
+                this.direction = robotU;
+                break;
+            case "down":
+                this.direction = robotD;
+                break;
+            case "left":
+                this.direction = robotL;
+                break;
+            case "right":
+                this.direction = robotR;
+                break;
+        }
+    }
+
 }

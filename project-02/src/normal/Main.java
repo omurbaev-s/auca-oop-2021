@@ -8,7 +8,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
 
 public class Main extends JFrame {
     CanvasPanel mainPanel;
@@ -72,7 +71,6 @@ public class Main extends JFrame {
         mini.setBackground(Color.CYAN);
         level.setBackground(Color.CYAN);
         moves.setBackground(Color.CYAN);
-        reset.setLocation(getWidth()/2, getHeight()/2);
         mini.setPreferredSize(new Dimension(120, 40));
         level.setPreferredSize(new Dimension(120, 40));
         moves.setPreferredSize(new Dimension(120, 40));
@@ -168,11 +166,10 @@ public class Main extends JFrame {
                             widthCell, heightCell);
                 }
             }
-
-            drawImage(g, images.robotD,
-                    xLeftUpper+game.maze.getRobotCol()*widthCell,
-                    yLeftUpper+game.maze.getRobotRow()*heightCell,
-                    widthCell,heightCell);
+                drawImage(g, images.getDirection(),
+                        xLeftUpper + game.maze.getRobotCol() * widthCell,
+                        yLeftUpper + game.maze.getRobotRow() * heightCell,
+                        widthCell, heightCell);
          }
 
         private void drawImage(Graphics g, BufferedImage img, int x, int y, int width, int height) {
@@ -185,18 +182,23 @@ public class Main extends JFrame {
 
         @Override
         public void keyPressed(KeyEvent e) {
+
             if(e.getKeyCode() == KeyEvent.VK_F1){
                 JOptionPane.showMessageDialog(null,"Move robot using arrows!!!");
             } else if(e.getKeyCode()==KeyEvent.VK_UP){
+                images.direction("up");
                 game.maze.move(-1,0);
 
             } else if(e.getKeyCode()==KeyEvent.VK_DOWN){
+                images.direction("down");
                 game.maze.move(1,0);
 
             } else if(e.getKeyCode()==KeyEvent.VK_LEFT){
+                images.direction("left");
                 game.maze.move(0,-1);
 
             } else if(e.getKeyCode()==KeyEvent.VK_RIGHT){
+                images.direction("right");
                 game.maze.move(0,1);
 
             }
