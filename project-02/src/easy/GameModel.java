@@ -51,6 +51,12 @@ public class GameModel {
         }
         maze=new Maze(levels[curLvl]);
     }
+    public void reset(){
+
+        curLvl=0;
+        maze=new Maze(levels[curLvl]);
+
+    }
 
     public Object getCurLvl() {
         return curLvl+1;

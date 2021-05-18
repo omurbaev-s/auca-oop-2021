@@ -7,6 +7,7 @@ public class Maze {
 
     private int width;
     private int height;
+    private int moves;
 
     private int robotRow;
     private int robotCol;
@@ -19,6 +20,7 @@ public class Maze {
         height=level.length;
         width=level[0].length;
         data = new char[height][width];
+        moves=0;
 
         for(int r=0; r<height; r++){
             for(int c=0; c<width; c++){
@@ -59,9 +61,6 @@ public class Maze {
         return robotRow;
     }
 
-    public char getCurElement(int row, int col){
-        return data[row][col];
-    }
 
     public void move(int dr, int dc) {
         int tRow = robotRow+dr;
@@ -71,12 +70,10 @@ public class Maze {
 
         int r = boxes.indexOf(new Box(tRow,tCol));
 
-        System.out.println(r);
-        System.out.println(tRow+" "+tCol);
-
         if(data[tRow][tCol]==' '){
             robotRow=tRow;
             robotCol=tCol;
+            moves++;
         }else if (data[tRow][tCol] == 'B' && data[bRow][bCol] == ' ' ) {
 
                 robotRow = tRow;
@@ -85,21 +82,17 @@ public class Maze {
                 boxes.set(r,new Box(bRow, bCol));
                 data[tRow][tCol] = ' ';
                 data[bRow][bCol] = 'B';
+            moves++;
             }
-        System.out.println(boxes);
-        System.out.println(exits);
+
     }
 
-//    public int getBoxRow() {
-//        return boxRow;
-//    }
-//
-//    public int getBoxCol() {
-//        return boxCol;
-//    }
+
+    public int getMoves() {
+        return moves;
+    }
 
     public boolean isWin() {
-        int counter=0;
         boolean win=false;
         for(int i=0; i<boxes.size(); i++){
 
@@ -110,8 +103,6 @@ public class Maze {
                     win=false;
                     break;
                 }
-
-
         }
         return win;
 

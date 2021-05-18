@@ -1,21 +1,36 @@
 package easy;
 
 import javax.swing.*;
+import javax.swing.Box;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 
 public class Main extends JFrame {
     CanvasPanel mainPanel;
-
+    JPanel controlPanel;
     GameModel game;
     Images images;
+    JLabel levl = new JLabel("Level");
+    JLabel puzzle = new JLabel("Puzzle");
+    JLabel move = new JLabel("Moves");
+
+    JButton mini = new JButton("Minicosmos");
+    JButton level = new JButton();
+    JButton moves = new JButton();
+    JButton reset = new JButton("Reset(Esc)");
+
 
     Main() throws Exception{
         game = new GameModel();
         images = new Images();
         setLayout(new BorderLayout());
+        levl.setForeground(Color.YELLOW);
+        puzzle.setForeground(Color.YELLOW);
+        move.setForeground(Color.YELLOW);
 
         mainPanel = new CanvasPanel();
         mainPanel.setBackground(Color.DARK_GRAY);
@@ -24,8 +39,44 @@ public class Main extends JFrame {
         add(mainPanel, BorderLayout.CENTER);
         mainPanel.addKeyListener(new CanvasPanelListener());
 
+        controlPanel = new JPanel();
+        controlPanel.setBackground(Color.DARK_GRAY);
+        controlPanel.setFocusable(true);
+        controlPanel.requestFocus();
+        controlPanel.add(levl);
+        controlPanel.add(Box.createRigidArea(new Dimension(100,20)));
+        controlPanel.add(mini);
+        controlPanel.add(puzzle);
+        controlPanel.add(Box.createRigidArea(new Dimension(100,20)));
+        controlPanel.add(level);
+        controlPanel.add(move);
+        controlPanel.add(Box.createRigidArea(new Dimension(100,20)));
+        controlPanel.add(moves);
+        controlPanel.add(Box.createRigidArea(new Dimension(100,20)));
+        controlPanel.add(reset);
+        controlPanel.setPreferredSize(new Dimension(150,100));
+        add(controlPanel, BorderLayout.EAST);
+        mini.setBackground(Color.CYAN);
+        level.setBackground(Color.CYAN);
+        moves.setBackground(Color.CYAN);
+        reset.setLocation(getWidth()/2, getHeight()/2);
+        mini.setPreferredSize(new Dimension(120, 40));
+        level.setPreferredSize(new Dimension(120, 40));
+        moves.setPreferredSize(new Dimension(120, 40));
+        reset.setPreferredSize(new Dimension(120, 40));
+
+        reset.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                game.reset();
+                repaint();
+                mainPanel.setFocusable(true);
+                mainPanel.requestFocus();
+            }
+        });
+
         setTitle("Sokoban");
-        setSize(800,800);
+        setSize(1000,800);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
@@ -36,7 +87,7 @@ public class Main extends JFrame {
 
     public static void main(String[] args){
         try {
-            new Main();
+          new Main();
         }catch (Exception e){
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
@@ -47,11 +98,14 @@ public class Main extends JFrame {
         @Override
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
+            setBackground(Color.BLACK);
+            level.setText(String.valueOf(game.getCurLvl()));
+            moves.setText(String.valueOf(game.maze.getMoves()));
 
             int widthCell = images.ground.getWidth();
             int heightCell = images.ground.getHeight();
 
-            int xLeftUpper = getWidth()/2 - widthCell*game.maze.getWidth()/2;
+            int xLeftUpper = getWidth()/2 - widthCell*game.maze.getWidth()/2-widthCell;
             int yLeftUpper = getHeight()/2 - heightCell*game.maze.getHeight()/2;
 
             for (int r = 0; r < game.maze.getHeight(); r++) {
@@ -62,6 +116,8 @@ public class Main extends JFrame {
                                     xLeftUpper + c * widthCell, yLeftUpper + r * heightCell, widthCell, heightCell );
                             break;
                         case '#':
+                            drawImage(g, images.ground,
+                                    xLeftUpper + c * widthCell, yLeftUpper + r * heightCell, widthCell, heightCell );
                             drawImage(g, images.wall,
                                     xLeftUpper + c * widthCell, yLeftUpper + r * heightCell, widthCell, heightCell);
                             break;
@@ -76,11 +132,19 @@ public class Main extends JFrame {
             }
             for(int i=0; i<game.maze.boxes.size(); i++){
                 if(game.maze.exits.contains(new Exit(game.maze.boxes.get(i).getBRow(),game.maze.boxes.get(i).getBCol()))) {
+                    drawImage(g, images.ground,
+                            xLeftUpper + game.maze.boxes.get(i).getBCol() * widthCell,
+                            yLeftUpper + game.maze.boxes.get(i).getBRow() * heightCell,
+                            widthCell, heightCell );
                     drawImage(g, images.rBox,
                             xLeftUpper + game.maze.boxes.get(i).getBCol() * widthCell,
                             yLeftUpper + game.maze.boxes.get(i).getBRow() * heightCell,
                             widthCell, heightCell);
                 } else{
+                    drawImage(g, images.ground,
+                            xLeftUpper + game.maze.boxes.get(i).getBCol() * widthCell,
+                            yLeftUpper + game.maze.boxes.get(i).getBRow() * heightCell,
+                            widthCell, heightCell );
                     drawImage(g, images.bBox,
                             xLeftUpper + game.maze.boxes.get(i).getBCol() * widthCell,
                             yLeftUpper + game.maze.boxes.get(i).getBRow() * heightCell,
@@ -120,11 +184,13 @@ public class Main extends JFrame {
 
             }
             repaint();
+
             if(game.maze.isWin()){
                 JOptionPane.showMessageDialog(Main.this, String.format("Maze %s solved", game.getCurLvl()));
                 game.nextLevel();
                 repaint();
             }
+
         }
     }
 }
