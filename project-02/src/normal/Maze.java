@@ -20,8 +20,10 @@ public class Maze {
     protected ArrayList<Exit> exits;
     protected ArrayList<Box> boxes;
     private ArrayList<BoxWay>[] boxWay;
+    private int back;
 
     public Maze(char[][] level){
+        back=0;
         robotWay= new ArrayList<>();
         directions=new ArrayList<>();
         boxes=new ArrayList<>();
@@ -104,27 +106,25 @@ public class Maze {
 
         System.out.println(Arrays.toString(boxWay));
         System.out.println(robotWay);
+        System.out.println(robotRow+" "+robotCol);
 
 
     }
     public void undo() {
-        int curRobot;
-        int counter = 0;
-        for (int i = 0; i < robotWay.size(); i++) {
-            if (robotWay.get(i).equals(new RobotWay(robotRow, robotCol))) {
-                counter++;
+        back++;
+        moves--;
+        int last = robotWay.size()-1;
+
+        System.out.println(last);
+
+            if (back<=last) {
+//                robotWay.add(new RobotWay(robotRow, robotCol));
+                robotRow = robotWay.get(last - back).getRobotRow();
+                robotCol = robotWay.get(last - back).getRobotCol();
+
             }
-        }
-            if (counter == 0) {
-                curRobot = robotWay.indexOf(new RobotWay(robotRow, robotCol));
-            } else {
-                curRobot = robotWay.lastIndexOf(new RobotWay(robotRow, robotCol));
-            }
-            if (curRobot != 0) {
-                robotRow = robotWay.get(curRobot - 1).getRobotRow();
-                robotCol = robotWay.get(curRobot - 1).getRobotCol();
-                robotWay.add(new RobotWay(robotRow, robotCol));
-            }
+        System.out.println(robotWay);
+        System.out.println(robotRow+" "+robotCol);
         }
 
 
