@@ -10,16 +10,12 @@ public class Maze {
 
     private int robotRow;
     private int robotCol;
-    private ArrayList<Integer> boxRow;
-    private ArrayList<Integer> boxCol;
     protected ArrayList<Exit> exits;
     protected ArrayList<Box> boxes;
 
     public Maze(char[][] level){
         boxes=new ArrayList<>();
         exits=new ArrayList<>();
-        boxRow=new ArrayList<>();
-        boxCol=new ArrayList<>();
         height=level.length;
         width=level[0].length;
         data = new char[height][width];
@@ -34,8 +30,6 @@ public class Maze {
                     exits.add(new Exit(r,c));
                     data[r][c]=' ';
                 } else if(level[r][c]=='B'){
-                    boxRow.add(r);
-                    boxCol.add(c);
                     boxes.add(new Box(r,c));
                     data[r][c]='B';
                 } else{
@@ -75,8 +69,6 @@ public class Maze {
         int bRow = tRow+dr;
         int bCol = tCol+dc;
 
-//        int cRow = boxRow.indexOf(tRow);
-//        int cCol = boxCol.indexOf(tCol);
         int r = boxes.indexOf(new Box(tRow,tCol));
 
         System.out.println(r);
@@ -89,8 +81,6 @@ public class Maze {
 
                 robotRow = tRow;
                 robotCol = tCol;
-//                boxRow.set(cRow,bRow);
-//                boxCol.set(cCol,bCol);
 
                 boxes.set(r,new Box(bRow, bCol));
                 data[tRow][tCol] = ' ';
@@ -117,13 +107,12 @@ public class Maze {
                     win = true;
 
                 } else {
+                    win=false;
                     break;
                 }
 
 
         }
-
-
         return win;
 
     }

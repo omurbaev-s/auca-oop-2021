@@ -75,10 +75,17 @@ public class Main extends JFrame {
                         widthCell, heightCell);
             }
             for(int i=0; i<game.maze.boxes.size(); i++){
-                drawImage(g, images.bBox,
-                        xLeftUpper + game.maze.boxes.get(i).getBCol() * widthCell,
-                        yLeftUpper + game.maze.boxes.get(i).getBRow() * heightCell,
-                        widthCell, heightCell);
+                if(game.maze.exits.contains(new Exit(game.maze.boxes.get(i).getBRow(),game.maze.boxes.get(i).getBCol()))) {
+                    drawImage(g, images.rBox,
+                            xLeftUpper + game.maze.boxes.get(i).getBCol() * widthCell,
+                            yLeftUpper + game.maze.boxes.get(i).getBRow() * heightCell,
+                            widthCell, heightCell);
+                } else{
+                    drawImage(g, images.bBox,
+                            xLeftUpper + game.maze.boxes.get(i).getBCol() * widthCell,
+                            yLeftUpper + game.maze.boxes.get(i).getBRow() * heightCell,
+                            widthCell, heightCell);
+                }
             }
 
             drawImage(g, images.robot,
