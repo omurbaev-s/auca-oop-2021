@@ -51,4 +51,7 @@ public class Images {
         }
     }
 
+    public void reset() {
+        direction=robotD;
+    }
 }

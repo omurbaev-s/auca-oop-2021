@@ -17,6 +17,7 @@ public class Main extends JFrame {
     JLabel levl = new JLabel("Level");
     JLabel puzzle = new JLabel("Puzzle");
     JLabel move = new JLabel("Moves");
+    Undo UNDO;
 
     JButton mini = new JButton("Minicosmos");
     JButton level = new JButton();
@@ -29,6 +30,7 @@ public class Main extends JFrame {
 
 
     Main() throws Exception{
+        UNDO = new Undo();
         game = new GameModel();
         images = new Images();
         setLayout(new BorderLayout());
@@ -84,8 +86,16 @@ public class Main extends JFrame {
             @Override
             public void mousePressed(MouseEvent e) {
                 game.reset();
+                images.reset();
                 repaint();
-                mainPanel.setFocusable(true);
+                mainPanel.requestFocus();
+            }
+        });
+        undo.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                game.maze.undo();
+                repaint();
                 mainPanel.requestFocus();
             }
         });
@@ -187,19 +197,19 @@ public class Main extends JFrame {
                 JOptionPane.showMessageDialog(null,"Move robot using arrows!!!");
             } else if(e.getKeyCode()==KeyEvent.VK_UP){
                 images.direction("up");
-                game.maze.move(-1,0);
+                game.maze.move(-1,0, images.getDirection());
 
             } else if(e.getKeyCode()==KeyEvent.VK_DOWN){
                 images.direction("down");
-                game.maze.move(1,0);
+                game.maze.move(1,0, images.getDirection());
 
             } else if(e.getKeyCode()==KeyEvent.VK_LEFT){
                 images.direction("left");
-                game.maze.move(0,-1);
+                game.maze.move(0,-1, images.getDirection());
 
             } else if(e.getKeyCode()==KeyEvent.VK_RIGHT){
                 images.direction("right");
-                game.maze.move(0,1);
+                game.maze.move(0,1, images.getDirection());
 
             }
             repaint();
@@ -207,6 +217,7 @@ public class Main extends JFrame {
             if(game.maze.isWin()){
                 JOptionPane.showMessageDialog(Main.this, String.format("Maze %s solved", game.getCurLvl()));
                 game.nextLevel();
+                images.reset();
                 repaint();
             }
 
