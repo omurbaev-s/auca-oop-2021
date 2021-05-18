@@ -10,14 +10,16 @@ public class Maze {
 
     private int robotRow;
     private int robotCol;
-    private int boxRow;
-    private int boxCol;
+    private ArrayList<Integer> boxRow;
+    private ArrayList<Integer> boxCol;
     protected ArrayList<Exit> exits;
     protected ArrayList<Box> boxes;
 
     public Maze(char[][] level){
         boxes=new ArrayList<>();
         exits=new ArrayList<>();
+        boxRow=new ArrayList<>();
+        boxCol=new ArrayList<>();
         height=level.length;
         width=level[0].length;
         data = new char[height][width];
@@ -32,8 +34,8 @@ public class Maze {
                     exits.add(new Exit(r,c));
                     data[r][c]=' ';
                 } else if(level[r][c]=='B'){
-                    boxRow=r;
-                    boxCol=c;
+                    boxRow.add(r);
+                    boxCol.add(c);
                     boxes.add(new Box(r,c));
                     data[r][c]='B';
                 } else{
@@ -73,32 +75,55 @@ public class Maze {
         int bRow = tRow+dr;
         int bCol = tCol+dc;
 
+//        int cRow = boxRow.indexOf(tRow);
+//        int cCol = boxCol.indexOf(tCol);
+        int r = boxes.indexOf(new Box(tRow,tCol));
+
+        System.out.println(r);
+        System.out.println(tRow+" "+tCol);
+
         if(data[tRow][tCol]==' '){
             robotRow=tRow;
             robotCol=tCol;
-        }else if(data[tRow][tCol]=='B' && data[bRow][bCol]==' '){
-            robotRow=tRow;
-            robotCol=tCol;
-            boxRow=bRow;
-            boxCol=bCol;
-            data[tRow][tCol]=' ';
-            data[bRow][bCol]='B';
-        }
+        }else if (data[tRow][tCol] == 'B' && data[bRow][bCol] == ' ' ) {
+
+                robotRow = tRow;
+                robotCol = tCol;
+//                boxRow.set(cRow,bRow);
+//                boxCol.set(cCol,bCol);
+
+                boxes.set(r,new Box(bRow, bCol));
+                data[tRow][tCol] = ' ';
+                data[bRow][bCol] = 'B';
+            }
+        System.out.println(boxes);
+        System.out.println(exits);
     }
-//    public void moveBox(int dr, int dc) {
-//        int tRow = boxRow+dr;
-//        int tCol = boxCol+dc;
-//        if(data)
+
+//    public int getBoxRow() {
+//        return boxRow;
+//    }
+//
+//    public int getBoxCol() {
+//        return boxCol;
 //    }
 
     public boolean isWin() {
+        int counter=0;
         boolean win=false;
-        for(int i=0; i<exits.size(); i++){
-            if(robotRow==exits.get(i).getExitRow() && robotCol==exits.get(i).getExitCol()){
-                win=true;
-                break;
-            }
+        for(int i=0; i<boxes.size(); i++){
+
+                if (exits.contains(new Exit(boxes.get(i).getBRow(),boxes.get(i).getBCol()))/*boxRow.get(j) == exits.get(i).getExitRow() && boxCol.get(j) == exits.get(i).getExitCol()*/) {
+                    win = true;
+
+                } else {
+                    break;
+                }
+
+
         }
+
+
         return win;
 
     }
